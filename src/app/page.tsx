@@ -18,6 +18,9 @@ export default function HomePage() {
         <li>✅ TypeScript actief</li>
         <li>✅ Architectuur gestart</li>
         <li>✅ KnowledgeProvider aanwezig</li>
+        <li>✅ Applicatie lokaal draaiend</li>
+        <li>✅ Deploy via Vercel</li>
+        <li>✅ Werkt op smartphone</li>
       </ul>
     </main>
   );
