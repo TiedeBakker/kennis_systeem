@@ -61,3 +61,10 @@ Nieuwe code wordt pas opgenomen nadat:
 - de bedoeling duidelijk is;
 - de architectuur klopt;
 - de functionaliteit is getoetst.
+
+## Next.js
+
+Tijdens de ontwikkelfase worden pagina's die de volledige keten testen expliciet dynamisch gemaakt.
+
+```typescript
+export const dynamic = "force-dynamic";

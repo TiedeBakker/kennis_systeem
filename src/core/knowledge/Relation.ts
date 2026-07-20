@@ -9,8 +9,6 @@ import type { Identifier } from "@/core";
  */
 export interface Relation {
   readonly id: Identifier;
-
   readonly source: Identifier;
-
   readonly target: Identifier;
 }

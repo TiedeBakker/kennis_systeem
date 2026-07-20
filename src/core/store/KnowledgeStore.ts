@@ -18,4 +18,8 @@ export interface KnowledgeStore {
   getParameter(id: Identifier): Promise<Parameter | null>;
 
   getRandomObject(): Promise<Object | null>;
+
+  getRelationsForObject(id: Identifier): Promise<Relation[]>;
+
+  getParametersForObject(id: Identifier): Promise<Parameter[]>;
 }

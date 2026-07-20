@@ -11,3 +11,5 @@ OPEN ONTWERPVRAGEN
 - Waarde is waarschijnlijk geen
   kennisentiteit maar een invulling
   van een parameter.
+
+  Semantische identifier-typen zijn waarschijnlijk waardevol, maar de eerste stap is betekenisvolle parameternamen.

@@ -9,6 +9,15 @@ export default async function Home() {
   const provider = new DefaultKnowledgeProvider(store);
 
   const object = await provider.getRandomObject();
+  const relations =
+    object
+      ? await provider.getRelationsForObject(object.id)
+      : [];
+
+  const parameters =
+    object
+      ? await provider.getParametersForObject(object.id)
+      : [];
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
@@ -27,6 +36,18 @@ export default async function Home() {
           <p>
             <strong>Identifier:</strong> {object.id.value}
           </p>
+          <p>
+            <strong>Relaties:</strong> {relations.length}
+          </p>
+
+          <p>
+            <strong>Parameters:</strong> {parameters.length}
+          </p>
+          {parameters.map(parameter => (
+            <p key={parameter.id.value}>
+              <strong>{parameter.name}:</strong> {parameter.value}
+            </p>
+          ))}
         </>
       ) : (
         <p>Geen object gevonden.</p>

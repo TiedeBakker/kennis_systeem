@@ -9,10 +9,7 @@ import type { Identifier } from "@/core";
  */
 export interface Parameter {
   readonly id: Identifier;
-
   readonly object: Identifier;
-
   readonly name: string;
-
   readonly value: string;
 }

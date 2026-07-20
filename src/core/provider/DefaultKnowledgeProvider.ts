@@ -36,4 +36,16 @@ export class DefaultKnowledgeProvider implements KnowledgeProvider {
   async getRandomObject(): Promise<Object | null> {
     return this.store.getRandomObject();
   }
+
+  async getRelationsForObject(
+    id: Identifier,
+  ): Promise<Relation[]> {
+    return this.store.getRelationsForObject(id);
+  }
+
+  async getParametersForObject(
+    id: Identifier,
+  ): Promise<Parameter[]> {
+    return this.store.getParametersForObject(id);
+  }
 }
