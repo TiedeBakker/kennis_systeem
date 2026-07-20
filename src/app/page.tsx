@@ -13,7 +13,7 @@ export default async function Home() {
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>KennisSysteem</h1>
 
-      <p>Eerste werkende verticale keten.</p>
+      <p>Eerste (v2)werkende verticale keten.</p>
 
       {object ? (
         <>
