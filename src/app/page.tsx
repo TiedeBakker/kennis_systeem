@@ -1,27 +1,35 @@
-export default function HomePage() {
+import {
+  DefaultKnowledgeProvider,
+  MemoryKnowledgeStore,
+} from "@/core";
+
+export default async function Home() {
+  const store = new MemoryKnowledgeStore();
+  const provider = new DefaultKnowledgeProvider(store);
+
+  const object = await provider.getRandomObject();
+
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>KennisSysteem</h1>
 
-      <p>
-        Eerste werkende versie van de ontwikkelschil.
-      </p>
+      <p>Eerste werkende verticale keten.</p>
 
-      <hr />
+      {object ? (
+        <>
+          <h2>Willekeurig object</h2>
 
-      <p>
-        Sprint 1 – De eerste levende schil
-      </p>
+          <p>
+            <strong>Namespace:</strong> {object.id.namespace}
+          </p>
 
-      <ul>
-        <li>✅ Next.js draait</li>
-        <li>✅ TypeScript actief</li>
-        <li>✅ Architectuur gestart</li>
-        <li>✅ KnowledgeProvider aanwezig</li>
-        <li>✅ Applicatie lokaal draaiend</li>
-        <li>✅ Deploy via Vercel</li>
-        <li>✅ Werkt op smartphone</li>
-      </ul>
+          <p>
+            <strong>Identifier:</strong> {object.id.value}
+          </p>
+        </>
+      ) : (
+        <p>Geen object gevonden.</p>
+      )}
     </main>
   );
 }
