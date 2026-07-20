@@ -19,14 +19,30 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
   private readonly objects = new Map<string, Object>();
 
   constructor() {
-    const object: Object = {
-      id: {
-        namespace: "ks",
-        value: crypto.randomUUID(),
+    const objects: Object[] = [
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
       },
-    };
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+      },
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+      },
+    ];
 
-    this.objects.set(this.key(object.id), object);
+    for (const object of objects) {
+      this.objects.set(this.key(object.id), object);
+    }
   }
 
   async getObject(id: Identifier): Promise<Object | null> {
