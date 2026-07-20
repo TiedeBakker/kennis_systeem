@@ -11,4 +11,5 @@ export interface Relation {
   readonly id: Identifier;
   readonly source: Identifier;
   readonly target: Identifier;
+  readonly type: string;
 }

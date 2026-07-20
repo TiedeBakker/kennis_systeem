@@ -39,6 +39,11 @@ export default async function Home() {
           <p>
             <strong>Relaties:</strong> {relations.length}
           </p>
+          {relations.map(relation => (
+            <p key={relation.id.value}>
+              <strong>Relatie:</strong> {relation.type}
+            </p>
+          ))}
 
           <p>
             <strong>Parameters:</strong> {parameters.length}

@@ -65,13 +65,14 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
     }
 
     const relation: Relation = {
-      id: {
-        namespace: "ks",
-        value: crypto.randomUUID(),
-      },
-      source: object1.id,
-      target: object2.id,
-    };
+  id: {
+    namespace: "ks",
+    value: crypto.randomUUID(),
+  },
+  source: object1.id,
+  target: object2.id,
+  type: "relatedTo",
+};
 
     this.relations.set(this.key(relation.id), relation);
 

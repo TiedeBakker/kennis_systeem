@@ -68,3 +68,9 @@ Tijdens de ontwikkelfase worden pagina's die de volledige keten testen expliciet
 
 ```typescript
 export const dynamic = "force-dynamic";
+
+Ik zou deze afspraak zelfs opnemen in onze ontwikkelconventies:
+
+Relaties zijn gericht. Ze worden altijd geïnterpreteerd als:
+
+source --type--> target
