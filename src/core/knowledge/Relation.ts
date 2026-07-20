@@ -1,14 +1,16 @@
-import { Identifier } from "@/core/types";
+// src/core/knowledge/Relation.ts
+
+import type { Identifier } from "@/core";
 
 /**
  * Relation
  *
- * Een kennisentiteit die betekenis geeft
- * aan een verbinding tussen objecten.
- *
- * Deze eerste versie bevat uitsluitend
- * de identiteit van de relatie.
+ * Verbindt twee objecten.
  */
 export interface Relation {
   readonly id: Identifier;
+
+  readonly source: Identifier;
+
+  readonly target: Identifier;
 }

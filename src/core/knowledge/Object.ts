@@ -1,12 +1,11 @@
-import { Identifier } from "@/core/types";
+// src/core/knowledge/Object.ts
+
+import type { Identifier } from "@/core";
 
 /**
  * Object
  *
- * Een zelfstandig identificeerbare kennisentiteit.
- *
- * Een Object kan bestaan zonder relaties,
- * parameters of waarden.
+ * Een object is een identificeerbare kennisentiteit.
  */
 export interface Object {
   readonly id: Identifier;

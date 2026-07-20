@@ -1,15 +1,18 @@
-import { Identifier } from "@/core/types";
+// src/core/knowledge/Parameter.ts
+
+import type { Identifier } from "@/core";
 
 /**
  * Parameter
  *
- * Een kennisentiteit die vastlegt welke
- * eigenschap of welk kenmerk van een
- * kennisentiteit beschreven kan worden.
- *
- * Deze eerste versie bevat uitsluitend
- * de identiteit van de parameter.
+ * Beschrijft een eigenschap van een object.
  */
 export interface Parameter {
   readonly id: Identifier;
+
+  readonly object: Identifier;
+
+  readonly name: string;
+
+  readonly value: string;
 }
