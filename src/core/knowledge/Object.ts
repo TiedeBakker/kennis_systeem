@@ -1,12 +1,12 @@
-// src/core/knowledge/Object.ts
-
 import type { Identifier } from "@/core";
 
 /**
  * Object
  *
- * Een object is een identificeerbare kennisentiteit.
+ * Een identificeerbare kennisentiteit.
  */
 export interface Object {
   readonly id: Identifier;
+
+   readonly label: string;
 }

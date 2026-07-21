@@ -13,4 +13,20 @@
  * Eerst wordt het begrip vastgelegd.
  * Daarna volgt de geleidelijke uitbreiding.
  */
-export interface KnowledgeEntity {}
+import type {
+  Object,
+  Relation,
+  RelationValue,
+  Parameter,
+  ParameterValue,
+} from "@/core";
+
+/**
+ * Alle kennisentiteiten.
+ */
+export type KnowledgeEntity =
+  | Object
+  | Relation
+  | RelationValue
+  | Parameter
+  | ParameterValue;

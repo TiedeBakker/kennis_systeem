@@ -1,4 +1,7 @@
+// src/app/page.tsx
+
 export const dynamic = "force-dynamic";
+
 import {
   DefaultKnowledgeProvider,
   MemoryKnowledgeStore,
@@ -9,53 +12,62 @@ export default async function Home() {
   const provider = new DefaultKnowledgeProvider(store);
 
   const object = await provider.getRandomObject();
-  const relations =
-    object
-      ? await provider.getRelationsForObject(object.id)
-      : [];
 
-  const parameters =
-    object
-      ? await provider.getParametersForObject(object.id)
-      : [];
+  if (!object) {
+    return (
+      <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+        <h1>KennisSysteem</h1>
+        <p>Geen object gevonden.</p>
+      </main>
+    );
+  }
+
+  const relationValues =
+    await provider.getRelationValuesForObject(object.id);
+
+  const parameterValues =
+    await provider.getParameterValuesForObject(object.id);
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>KennisSysteem</h1>
 
-      <p>Eerste (v2)werkende verticale keten.</p>
+      <p>Eerste werkende verticale keten (MemoryKnowledgeStore).</p>
 
-      {object ? (
+      <h2>Willekeurig object</h2>
+
+      <p>
+        <strong>Namespace:</strong> {object.id.namespace}
+      </p>
+
+      <p>
+        <strong>Identifier:</strong> {object.id.value}
+      </p>
+
+      <p>
+        <strong>Label:</strong> {object.label}
+      </p>
+
+      <p>
+        <strong>Relaties:</strong> {relationValues.length}
+      </p>
+
+      <p>
+        <strong>Parameters:</strong> {parameterValues.length}
+      </p>
+
+      {parameterValues.length > 0 && (
         <>
-          <h2>Willekeurig object</h2>
+          <h3>Parameterwaarden</h3>
 
-          <p>
-            <strong>Namespace:</strong> {object.id.namespace}
-          </p>
-
-          <p>
-            <strong>Identifier:</strong> {object.id.value}
-          </p>
-          <p>
-            <strong>Relaties:</strong> {relations.length}
-          </p>
-          {relations.map(relation => (
-            <p key={relation.id.value}>
-              <strong>Relatie:</strong> {relation.type}
-            </p>
-          ))}
-
-          <p>
-            <strong>Parameters:</strong> {parameters.length}
-          </p>
-          {parameters.map(parameter => (
-            <p key={parameter.id.value}>
-              <strong>{parameter.name}:</strong> {parameter.value}
-            </p>
-          ))}
+          <ul>
+            {parameterValues.map((parameterValue) => (
+              <li key={parameterValue.id.value}>
+                {parameterValue.value}
+              </li>
+            ))}
+          </ul>
         </>
-      ) : (
-        <p>Geen object gevonden.</p>
       )}
     </main>
   );

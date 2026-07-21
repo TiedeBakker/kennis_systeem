@@ -7,7 +7,9 @@ export type {
 export type {
   Object,
   Relation,
+  RelationValue,
   Parameter,
+  ParameterValue,
 } from "./knowledge";
 
 export type {

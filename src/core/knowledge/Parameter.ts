@@ -1,15 +1,17 @@
-// src/core/knowledge/Parameter.ts
-
 import type { Identifier } from "@/core";
 
 /**
  * Parameter
  *
- * Beschrijft een eigenschap van een object.
+ * Definieert een parameter.
+ *
+ * Bijvoorbeeld:
+ * - geboortedatum
+ * - gewicht
+ * - inventarisnummer
  */
 export interface Parameter {
   readonly id: Identifier;
-  readonly object: Identifier;
-  readonly name: string;
-  readonly value: string;
+
+  readonly label: string;
 }

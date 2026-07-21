@@ -1,9 +1,13 @@
+// src/core/store/MemoryKnowledgeStore.ts
+
 import type {
   Identifier,
   KnowledgeStore,
   Object,
-  Parameter,
   Relation,
+  RelationValue,
+  Parameter,
+  ParameterValue,
 } from "@/core";
 
 /**
@@ -11,25 +15,29 @@ import type {
  *
  * Eenvoudige implementatie van KnowledgeStore.
  *
- * De gegevens worden uitsluitend in het geheugen
- * bewaard en zijn bedoeld voor ontwikkeling
- * en testen.
+ * Alle gegevens worden uitsluitend in het geheugen
+ * bewaard en zijn bedoeld voor ontwikkeling en testen.
  */
 export class MemoryKnowledgeStore implements KnowledgeStore {
   private readonly objects = new Map<string, Object>();
+
   private readonly relations = new Map<string, Relation>();
+  private readonly relationValues = new Map<string, RelationValue>();
 
   private readonly parameters = new Map<string, Parameter>();
+  private readonly parameterValues = new Map<string, ParameterValue>();
 
   constructor() {
-    // src/core/store/MemoryKnowledgeStore.ts
-    // constructor()
+    //
+    // Objecten
+    //
 
     const object1: Object = {
       id: {
         namespace: "ks",
         value: crypto.randomUUID(),
       },
+      label: "Eerste object",
     };
 
     const object2: Object = {
@@ -37,52 +45,126 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
         namespace: "ks",
         value: crypto.randomUUID(),
       },
-
+      label: "Tweede object",
     };
-    const parameters: Parameter[] = [
+
+    this.objects.set(this.key(object1.id), object1);
+    this.objects.set(this.key(object2.id), object2);
+
+    //
+    // Parameterdefinities
+    //
+
+    const titleParameter: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "title",
+    };
+
+    const categoryParameter: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "category",
+    };
+
+    const statusParameter: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "status",
+    };
+
+    for (const parameter of [
+      titleParameter,
+      categoryParameter,
+      statusParameter,
+    ]) {
+      this.parameters.set(this.key(parameter.id), parameter);
+    }
+
+    //
+    // Parameterwaarden
+    //
+
+    const parameterValues: ParameterValue[] = [
       {
-        id: { namespace: "ks", value: crypto.randomUUID() },
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+        parameter: titleParameter.id,
         object: object1.id,
-        name: "title",
         value: "Eerste object",
       },
       {
-        id: { namespace: "ks", value: crypto.randomUUID() },
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+        parameter: categoryParameter.id,
         object: object1.id,
-        name: "category",
         value: "Demo",
       },
       {
-        id: { namespace: "ks", value: crypto.randomUUID() },
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+        parameter: statusParameter.id,
         object: object1.id,
-        name: "status",
         value: "Actief",
       },
     ];
 
-    for (const parameter of parameters) {
-      this.parameters.set(this.key(parameter.id), parameter);
+    for (const parameterValue of parameterValues) {
+      this.parameterValues.set(
+        this.key(parameterValue.id),
+        parameterValue,
+      );
     }
 
+    //
+    // Relatiedefinitie
+    //
+
     const relation: Relation = {
-  id: {
-    namespace: "ks",
-    value: crypto.randomUUID(),
-  },
-  source: object1.id,
-  target: object2.id,
-  type: "relatedTo",
-};
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "relatedTo",
+    };
 
     this.relations.set(this.key(relation.id), relation);
 
-    const objects = [object1, object2];
+    //
+    // Concrete relatie
+    //
 
-    for (const object of objects) {
-      this.objects.set(this.key(object.id), object);
-    }
+    const relationValue: RelationValue = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      relation: relation.id,
+      source: object1.id,
+      target: object2.id,
+    };
 
+    this.relationValues.set(
+      this.key(relationValue.id),
+      relationValue,
+    );
   }
+
+  //
+  // Objecten
+  //
 
   async getObject(id: Identifier): Promise<Object | null> {
     return this.objects.get(this.key(id)) ?? null;
@@ -100,32 +182,68 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
     return objects[index];
   }
 
-  async getRelation(_id: Identifier): Promise<Relation | null> {
-    return null;
-  }
+  //
+  // Relatiedefinities
+  //
 
-  async getParameter(_id: Identifier): Promise<Parameter | null> {
-    return null;
-  }
-
-  async getRelationsForObject(
+  async getRelation(
     id: Identifier,
-  ): Promise<Relation[]> {
-    return Array.from(this.relations.values()).filter(
-      relation =>
-        this.key(relation.source) === this.key(id) ||
-        this.key(relation.target) === this.key(id),
+  ): Promise<Relation | null> {
+    return this.relations.get(this.key(id)) ?? null;
+  }
+
+  //
+  // Concrete relaties
+  //
+
+  async getRelationValue(
+    id: Identifier,
+  ): Promise<RelationValue | null> {
+    return this.relationValues.get(this.key(id)) ?? null;
+  }
+
+  async getRelationValuesForObject(
+    id: Identifier,
+  ): Promise<RelationValue[]> {
+    return Array.from(this.relationValues.values()).filter(
+      relationValue =>
+        this.key(relationValue.source) === this.key(id) ||
+        this.key(relationValue.target) === this.key(id),
     );
   }
 
-  async getParametersForObject(
+  //
+  // Parameterdefinities
+  //
+
+  async getParameter(
     id: Identifier,
-  ): Promise<Parameter[]> {
-    return Array.from(this.parameters.values()).filter(
-      parameter => this.key(parameter.object) === this.key(id),
+  ): Promise<Parameter | null> {
+    return this.parameters.get(this.key(id)) ?? null;
+  }
+
+  //
+  // Parameterwaarden
+  //
+
+  async getParameterValue(
+    id: Identifier,
+  ): Promise<ParameterValue | null> {
+    return this.parameterValues.get(this.key(id)) ?? null;
+  }
+
+  async getParameterValuesForObject(
+    id: Identifier,
+  ): Promise<ParameterValue[]> {
+    return Array.from(this.parameterValues.values()).filter(
+      parameterValue =>
+        this.key(parameterValue.object) === this.key(id),
     );
   }
 
+  //
+  // Helpers
+  //
 
   private key(id: Identifier): string {
     return `${id.namespace}:${id.value}`;

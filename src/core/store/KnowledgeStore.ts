@@ -1,25 +1,66 @@
-import type { Identifier } from "@/core";
-import type { Object, Relation, Parameter } from "@/core";
+// src/core/store/KnowledgeStore.ts
+
+import type {
+  Identifier,
+  Object,
+  Relation,
+  RelationValue,
+  Parameter,
+  ParameterValue,
+} from "@/core";
 
 /**
  * KnowledgeStore
  *
- * Verzorgt de opslag en het terugvinden
- * van kennisentiteiten.
+ * Interface voor de opslag van kennis.
  *
- * De implementatie kan gebruikmaken van
- * één of meerdere databronnen.
+ * De store is verantwoordelijk voor het
+ * opslaan en ophalen van kennisentiteiten.
  */
 export interface KnowledgeStore {
+  /**
+   * Objecten
+   */
+
   getObject(id: Identifier): Promise<Object | null>;
-
-  getRelation(id: Identifier): Promise<Relation | null>;
-
-  getParameter(id: Identifier): Promise<Parameter | null>;
 
   getRandomObject(): Promise<Object | null>;
 
-  getRelationsForObject(id: Identifier): Promise<Relation[]>;
+  /**
+   * Relatiedefinities
+   */
 
-  getParametersForObject(id: Identifier): Promise<Parameter[]>;
+  getRelation(id: Identifier): Promise<Relation | null>;
+
+  /**
+   * Concrete relaties
+   */
+
+  getRelationValue(
+    id: Identifier,
+  ): Promise<RelationValue | null>;
+
+  getRelationValuesForObject(
+    id: Identifier,
+  ): Promise<RelationValue[]>;
+
+  /**
+   * Parameterdefinities
+   */
+
+  getParameter(
+    id: Identifier,
+  ): Promise<Parameter | null>;
+
+  /**
+   * Concrete parameterwaarden
+   */
+
+  getParameterValue(
+    id: Identifier,
+  ): Promise<ParameterValue | null>;
+
+  getParameterValuesForObject(
+    id: Identifier,
+  ): Promise<ParameterValue[]>;
 }

@@ -1,10 +1,14 @@
+// src/core/provider/DefaultKnowledgeProvider.ts
+
 import type {
   Identifier,
   KnowledgeProvider,
   KnowledgeStore,
   Object,
-  Parameter,
   Relation,
+  RelationValue,
+  Parameter,
+  ParameterValue,
 } from "@/core";
 
 /**
@@ -19,33 +23,71 @@ import type {
 export class DefaultKnowledgeProvider implements KnowledgeProvider {
   constructor(
     private readonly store: KnowledgeStore,
-  ) { }
+  ) {}
 
-  async getObject(id: Identifier): Promise<Object | null> {
+  /**
+   * Objecten
+   */
+
+  async getObject(
+    id: Identifier,
+  ): Promise<Object | null> {
     return this.store.getObject(id);
-  }
-
-  async getRelation(id: Identifier): Promise<Relation | null> {
-    return this.store.getRelation(id);
-  }
-
-  async getParameter(id: Identifier): Promise<Parameter | null> {
-    return this.store.getParameter(id);
   }
 
   async getRandomObject(): Promise<Object | null> {
     return this.store.getRandomObject();
   }
 
-  async getRelationsForObject(
+  /**
+   * Relatiedefinities
+   */
+
+  async getRelation(
     id: Identifier,
-  ): Promise<Relation[]> {
-    return this.store.getRelationsForObject(id);
+  ): Promise<Relation | null> {
+    return this.store.getRelation(id);
   }
 
-  async getParametersForObject(
+  /**
+   * Concrete relaties
+   */
+
+  async getRelationValue(
     id: Identifier,
-  ): Promise<Parameter[]> {
-    return this.store.getParametersForObject(id);
+  ): Promise<RelationValue | null> {
+    return this.store.getRelationValue(id);
+  }
+
+  async getRelationValuesForObject(
+    id: Identifier,
+  ): Promise<RelationValue[]> {
+    return this.store.getRelationValuesForObject(id);
+  }
+
+  /**
+   * Parameterdefinities
+   */
+
+  async getParameter(
+    id: Identifier,
+  ): Promise<Parameter | null> {
+    return this.store.getParameter(id);
+  }
+
+  /**
+   * Concrete parameterwaarden
+   */
+
+  async getParameterValue(
+    id: Identifier,
+  ): Promise<ParameterValue | null> {
+    return this.store.getParameterValue(id);
+  }
+
+  async getParameterValuesForObject(
+    id: Identifier,
+  ): Promise<ParameterValue[]> {
+    return this.store.getParameterValuesForObject(id);
   }
 }
