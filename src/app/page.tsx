@@ -32,7 +32,7 @@ export default async function Home() {
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>KennisSysteem</h1>
+      <h1>KennisSysteem 3.1</h1>
 
       <p>Eerste werkende verticale keten (SQLiteKnowledgeStore).</p>
 
