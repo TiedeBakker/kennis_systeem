@@ -4,11 +4,13 @@ export const dynamic = "force-dynamic";
 
 import {
   DefaultKnowledgeProvider,
-  MemoryKnowledgeStore,
 } from "@/core";
 
+import { SQLiteKnowledgeStore } from "@/core/store/SQLiteKnowledgeStore";
+
 export default async function Home() {
-  const store = new MemoryKnowledgeStore();
+  const store = new SQLiteKnowledgeStore();
+
   const provider = new DefaultKnowledgeProvider(store);
 
   const object = await provider.getRandomObject();
@@ -32,7 +34,7 @@ export default async function Home() {
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>KennisSysteem</h1>
 
-      <p>Eerste werkende verticale keten (MemoryKnowledgeStore).</p>
+      <p>Eerste werkende verticale keten (SQLiteKnowledgeStore).</p>
 
       <h2>Willekeurig object</h2>
 
