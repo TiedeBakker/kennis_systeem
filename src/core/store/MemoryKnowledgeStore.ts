@@ -1,24 +1,25 @@
 // src/core/store/MemoryKnowledgeStore.ts
+// src/core/store/MemoryKnowledgeStore.ts
 
 import type {
   Identifier,
   KnowledgeStore,
   Object,
-  Relation,
-  RelationValue,
   Parameter,
   ParameterValue,
+  Relation,
+  RelationValue,
 } from "@/core";
 
 /**
  * MemoryKnowledgeStore
  *
- * Eenvoudige implementatie van KnowledgeStore.
- *
- * Alle gegevens worden uitsluitend in het geheugen
- * bewaard en zijn bedoeld voor ontwikkeling en testen.
+ * Referentie-implementatie van KnowledgeStore.
+ * Wordt gebruikt voor testen en vergelijking met
+ * SQLiteKnowledgeStore.
  */
 export class MemoryKnowledgeStore implements KnowledgeStore {
+
   private readonly objects = new Map<string, Object>();
 
   private readonly relations = new Map<string, Relation>();
@@ -28,6 +29,7 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
   private readonly parameterValues = new Map<string, ParameterValue>();
 
   constructor() {
+
     //
     // Objecten
     //
@@ -38,6 +40,8 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
         value: crypto.randomUUID(),
       },
       label: "Eerste object",
+      validFrom: null,
+      validTo: null,
     };
 
     const object2: Object = {
@@ -46,90 +50,12 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
         value: crypto.randomUUID(),
       },
       label: "Tweede object",
+      validFrom: null,
+      validTo: null,
     };
 
-    this.objects.set(this.key(object1.id), object1);
-    this.objects.set(this.key(object2.id), object2);
-
     //
-    // Parameterdefinities
-    //
-
-    const titleParameter: Parameter = {
-      id: {
-        namespace: "ks",
-        value: crypto.randomUUID(),
-      },
-      label: "title",
-    };
-
-    const categoryParameter: Parameter = {
-      id: {
-        namespace: "ks",
-        value: crypto.randomUUID(),
-      },
-      label: "category",
-    };
-
-    const statusParameter: Parameter = {
-      id: {
-        namespace: "ks",
-        value: crypto.randomUUID(),
-      },
-      label: "status",
-    };
-
-    for (const parameter of [
-      titleParameter,
-      categoryParameter,
-      statusParameter,
-    ]) {
-      this.parameters.set(this.key(parameter.id), parameter);
-    }
-
-    //
-    // Parameterwaarden
-    //
-
-    const parameterValues: ParameterValue[] = [
-      {
-        id: {
-          namespace: "ks",
-          value: crypto.randomUUID(),
-        },
-        parameter: titleParameter.id,
-        object: object1.id,
-        value: "Eerste object",
-      },
-      {
-        id: {
-          namespace: "ks",
-          value: crypto.randomUUID(),
-        },
-        parameter: categoryParameter.id,
-        object: object1.id,
-        value: "Demo",
-      },
-      {
-        id: {
-          namespace: "ks",
-          value: crypto.randomUUID(),
-        },
-        parameter: statusParameter.id,
-        object: object1.id,
-        value: "Actief",
-      },
-    ];
-
-    for (const parameterValue of parameterValues) {
-      this.parameterValues.set(
-        this.key(parameterValue.id),
-        parameterValue,
-      );
-    }
-
-    //
-    // Relatiedefinitie
+    // Relatietype
     //
 
     const relation: Relation = {
@@ -140,8 +66,6 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
       label: "relatedTo",
     };
 
-    this.relations.set(this.key(relation.id), relation);
-
     //
     // Concrete relatie
     //
@@ -151,99 +75,171 @@ export class MemoryKnowledgeStore implements KnowledgeStore {
         namespace: "ks",
         value: crypto.randomUUID(),
       },
+
       relation: relation.id,
+
       source: object1.id,
       target: object2.id,
+
+      validFrom: null,
+      validTo: null,
     };
 
-    this.relationValues.set(
-      this.key(relationValue.id),
-      relationValue,
-    );
-  }
+    //
+    // Parameters
+    //
 
-  //
-  // Objecten
-  //
+    const title: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "title",
+      valueType: null,
+      unit: null,
+      validFrom: null,
+      validTo: null,
+    };
+
+    const category: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "category",
+      valueType: null,
+      unit: null,
+      validFrom: null,
+      validTo: null,
+    };
+
+    const status: Parameter = {
+      id: {
+        namespace: "ks",
+        value: crypto.randomUUID(),
+      },
+      label: "status",
+      valueType: null,
+      unit: null,
+      validFrom: null,
+      validTo: null,
+    };
+
+    //
+    // Parameterwaarden
+    //
+
+    const values: ParameterValue[] = [
+
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+
+        parameter: title.id,
+        object: object1.id,
+
+        value: "Eerste object",
+
+        validFrom: null,
+        validTo: null,
+      },
+
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+
+        parameter: category.id,
+        object: object1.id,
+
+        value: "Demo",
+
+        validFrom: null,
+        validTo: null,
+      },
+
+      {
+        id: {
+          namespace: "ks",
+          value: crypto.randomUUID(),
+        },
+
+        parameter: status.id,
+        object: object1.id,
+
+        value: "Actief",
+
+        validFrom: null,
+        validTo: null,
+      },
+    ];
+
+    //
+    // Maps vullen
+    //
+
+    this.objects.set(this.key(object1.id), object1);
+    this.objects.set(this.key(object2.id), object2);
+
+    this.relations.set(this.key(relation.id), relation);
+    this.relationValues.set(this.key(relationValue.id), relationValue);
+
+    this.parameters.set(this.key(title.id), title);
+    this.parameters.set(this.key(category.id), category);
+    this.parameters.set(this.key(status.id), status);
+
+    for (const value of values) {
+      this.parameterValues.set(this.key(value.id), value);
+    }
+  }
 
   async getObject(id: Identifier): Promise<Object | null> {
     return this.objects.get(this.key(id)) ?? null;
   }
 
   async getRandomObject(): Promise<Object | null> {
-    const objects = Array.from(this.objects.values());
-
-    if (objects.length === 0) {
-      return null;
-    }
-
-    const index = Math.floor(Math.random() * objects.length);
-
-    return objects[index];
+    const list = [...this.objects.values()];
+    return list[Math.floor(Math.random() * list.length)] ?? null;
   }
 
-  //
-  // Relatiedefinities
-  //
-
-  async getRelation(
-    id: Identifier,
-  ): Promise<Relation | null> {
+  async getRelation(id: Identifier): Promise<Relation | null> {
     return this.relations.get(this.key(id)) ?? null;
   }
 
-  //
-  // Concrete relaties
-  //
+  async getParameter(id: Identifier): Promise<Parameter | null> {
+    return this.parameters.get(this.key(id)) ?? null;
+  }
 
-  async getRelationValue(
-    id: Identifier,
-  ): Promise<RelationValue | null> {
+  async getRelationValue(id: Identifier): Promise<RelationValue | null> {
     return this.relationValues.get(this.key(id)) ?? null;
+  }
+
+  async getParameterValue(id: Identifier): Promise<ParameterValue | null> {
+    return this.parameterValues.get(this.key(id)) ?? null;
   }
 
   async getRelationValuesForObject(
     id: Identifier,
   ): Promise<RelationValue[]> {
-    return Array.from(this.relationValues.values()).filter(
-      relationValue =>
-        this.key(relationValue.source) === this.key(id) ||
-        this.key(relationValue.target) === this.key(id),
+
+    return [...this.relationValues.values()].filter(
+      rv =>
+        this.key(rv.source) === this.key(id) ||
+        this.key(rv.target) === this.key(id),
     );
-  }
-
-  //
-  // Parameterdefinities
-  //
-
-  async getParameter(
-    id: Identifier,
-  ): Promise<Parameter | null> {
-    return this.parameters.get(this.key(id)) ?? null;
-  }
-
-  //
-  // Parameterwaarden
-  //
-
-  async getParameterValue(
-    id: Identifier,
-  ): Promise<ParameterValue | null> {
-    return this.parameterValues.get(this.key(id)) ?? null;
   }
 
   async getParameterValuesForObject(
     id: Identifier,
   ): Promise<ParameterValue[]> {
-    return Array.from(this.parameterValues.values()).filter(
-      parameterValue =>
-        this.key(parameterValue.object) === this.key(id),
+
+    return [...this.parameterValues.values()].filter(
+      pv => this.key(pv.object) === this.key(id),
     );
   }
-
-  //
-  // Helpers
-  //
 
   private key(id: Identifier): string {
     return `${id.namespace}:${id.value}`;

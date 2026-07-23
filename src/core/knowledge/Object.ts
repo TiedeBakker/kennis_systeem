@@ -1,12 +1,15 @@
-import type { Identifier } from "@/core";
+
 
 /**
  * Object
  *
  * Een identificeerbare kennisentiteit.
  */
-export interface Object {
-  readonly id: Identifier;
+import type { Identifier } from "@/core";
 
-   readonly label: string;
+import type { Validity } from "./Validity";
+
+export interface Object extends Validity {
+  id: Identifier;
+  label: string;
 }

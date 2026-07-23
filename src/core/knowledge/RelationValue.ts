@@ -1,25 +1,18 @@
-import type { Identifier } from "@/core";
 
 /**
  * RelationValue
  *
  * Concrete relatie tussen twee objecten.
  */
-export interface RelationValue {
-  readonly id: Identifier;
+import type { Identifier } from "@/core";
 
-  /**
-   * Verwijzing naar de relatiedefinitie.
-   */
-  readonly relation: Identifier;
+import type { Validity } from "./Validity";
 
-  /**
-   * Bronobject.
-   */
-  readonly source: Identifier;
+export interface RelationValue extends Validity {
+  id: Identifier;
 
-  /**
-   * Doelobject.
-   */
-  readonly target: Identifier;
+  relation: Identifier;
+
+  source: Identifier;
+  target: Identifier;
 }

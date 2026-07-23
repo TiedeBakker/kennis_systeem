@@ -1,4 +1,4 @@
-import type { Identifier } from "@/core";
+
 
 /**
  * ParameterValue
@@ -6,18 +6,15 @@ import type { Identifier } from "@/core";
  * Concrete waarde van een parameter
  * voor één object.
  */
-export interface ParameterValue {
-  readonly id: Identifier;
+import type { Identifier } from "@/core";
 
-  /**
-   * Verwijzing naar de parameterdefinitie.
-   */
-  readonly parameter: Identifier;
+import type { Validity } from "./Validity";
 
-  /**
-   * Object waarvoor deze waarde geldt.
-   */
-  readonly object: Identifier;
+export interface ParameterValue extends Validity {
+  id: Identifier;
 
-  readonly value: string;
+  parameter: Identifier;
+  object: Identifier;
+
+  value: string;
 }

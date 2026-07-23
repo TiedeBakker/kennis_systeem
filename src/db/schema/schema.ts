@@ -5,25 +5,53 @@ import {
   text,
 } from "drizzle-orm/sqlite-core";
 
-/**
- * Objecten
- */
+//
+// Catalogi
+//
+
+export const objectTypes = sqliteTable("object_types", {
+  id: text("id").primaryKey(),
+  label: text("label").notNull(),
+});
+
+export const valueTypes = sqliteTable("value_types", {
+  id: text("id").primaryKey(),
+  label: text("label").notNull(),
+});
+
+export const units = sqliteTable("units", {
+  id: text("id").primaryKey(),
+  label: text("label").notNull(),
+  symbol: text("symbol").notNull(),
+});
+
+//
+// Objecten
+//
+
 export const objects = sqliteTable("objects", {
   id: text("id").primaryKey(),
+
   label: text("label").notNull(),
+
+  validFrom: text("valid_from"),
+  validTo: text("valid_to"),
 });
 
-/**
- * Relatiedefinities
- */
+//
+// Relatietypen
+//
+
 export const relations = sqliteTable("relations", {
   id: text("id").primaryKey(),
+
   label: text("label").notNull(),
 });
 
-/**
- * Concrete relaties
- */
+//
+// Concrete relaties
+//
+
 export const relationValues = sqliteTable("relation_values", {
   id: text("id").primaryKey(),
 
@@ -38,19 +66,34 @@ export const relationValues = sqliteTable("relation_values", {
   targetId: text("target_id")
     .notNull()
     .references(() => objects.id),
+
+  validFrom: text("valid_from"),
+  validTo: text("valid_to"),
 });
 
-/**
- * Parameterdefinities
- */
+//
+// Parameterdefinities
+//
+
 export const parameters = sqliteTable("parameters", {
   id: text("id").primaryKey(),
+
   label: text("label").notNull(),
+
+  valueTypeId: text("value_type_id")
+    .references(() => valueTypes.id),
+
+  unitId: text("unit_id")
+    .references(() => units.id),
+
+  validFrom: text("valid_from"),
+  validTo: text("valid_to"),
 });
 
-/**
- * Concrete parameterwaarden
- */
+//
+// Parameterwaarden
+//
+
 export const parameterValues = sqliteTable("parameter_values", {
   id: text("id").primaryKey(),
 
@@ -63,4 +106,7 @@ export const parameterValues = sqliteTable("parameter_values", {
     .references(() => objects.id),
 
   value: text("value").notNull(),
+
+  validFrom: text("valid_from"),
+  validTo: text("valid_to"),
 });

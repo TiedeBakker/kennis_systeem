@@ -1,4 +1,3 @@
-import type { Identifier } from "@/core";
 
 /**
  * Parameter
@@ -10,8 +9,14 @@ import type { Identifier } from "@/core";
  * - gewicht
  * - inventarisnummer
  */
-export interface Parameter {
-  readonly id: Identifier;
+import type { Identifier } from "@/core";
 
-  readonly label: string;
+import type { Validity } from "./Validity";
+
+export interface Parameter extends Validity {
+  id: Identifier;
+  label: string;
+
+  valueType: Identifier | null;
+  unit: Identifier | null;
 }

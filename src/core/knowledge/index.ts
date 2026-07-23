@@ -11,5 +11,7 @@ export type { Parameter } from "./Parameter";
 export type { ParameterValue } from "./ParameterValue";
 export type { KnowledgeEntity } from "./KnowledgeEntity";
 
-// Wordt toegevoegd zodra uitgewerkt
-// export type { Validity } from "./Validity";
+export type { Validity } from "./Validity";
+export type { ValueType } from "./ValueType";
+export type { Unit } from "./Unit";
+export type { ObjectType } from "./ObjectType";
