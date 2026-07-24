@@ -1,11 +1,10 @@
 // src/db/client/database.ts
 
-import "dotenv/config";
 
 import { drizzle } from "drizzle-orm/libsql";
 
 import * as schema from "@/db/schema/schema";
-
+console.log(process.env.TURSO_DATABASE_URL);
 /**
  * Centrale databaseverbinding.
  *
@@ -20,3 +19,4 @@ export const db = drizzle({
   },
   schema,
 });
+

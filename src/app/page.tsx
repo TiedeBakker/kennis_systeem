@@ -1,76 +1,57 @@
-// src/app/page.tsx
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useState } from "react";
+import ObjectBrowser from "@/components/ObjectBrowser";
 
-import {
-  DefaultKnowledgeProvider,
-} from "@/core";
+const tabs = [
+  "Objecten",
+  "Relaties",
+  "Parameters",
+  "Waarden",
+  "Import/export",
+];
 
-import { SQLiteKnowledgeStore } from "@/core/store/SQLiteKnowledgeStore";
+export default function Home() {
 
-export default async function Home() {
-  const store = new SQLiteKnowledgeStore();
-
-  const provider = new DefaultKnowledgeProvider(store);
-
-  const object = await provider.getRandomObject();
-
-  if (!object) {
-    return (
-      <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-        <h1>KennisSysteem</h1>
-        <p>Geen object gevonden.</p>
-      </main>
-    );
-  }
-
-  const relationValues =
-    await provider.getRelationValuesForObject(object.id);
-
-  const parameterValues =
-    await provider.getParameterValuesForObject(object.id);
+  const [activeTab, setActiveTab] = useState("Objecten");
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>KennisSysteem 3.1</h1>
+    <main className="p-6">
 
-      <p>Eerste werkende verticale keten (SQLiteKnowledgeStore).</p>
+      <h1 className="text-2xl font-bold mb-4">
+        Kennisomgeving
+      </h1>
 
-      <h2>Willekeurig object</h2>
+      <div className="flex gap-2 border-b mb-6">
 
-      <p>
-        <strong>Namespace:</strong> {object.id.namespace}
-      </p>
+        {tabs.map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={
+              activeTab === tab
+              ? "px-4 py-2 border-b-2 font-bold"
+              : "px-4 py-2"
+            }
+          >
+            {tab}
+          </button>
+        ))}
 
-      <p>
-        <strong>Identifier:</strong> {object.id.value}
-      </p>
+      </div>
 
-      <p>
-        <strong>Label:</strong> {object.label}
-      </p>
 
-      <p>
-        <strong>Relaties:</strong> {relationValues.length}
-      </p>
+      {activeTab === "Objecten" &&
+        <ObjectBrowser />
+      }
 
-      <p>
-        <strong>Parameters:</strong> {parameterValues.length}
-      </p>
 
-      {parameterValues.length > 0 && (
-        <>
-          <h3>Parameterwaarden</h3>
+      {activeTab !== "Objecten" &&
+        <div className="text-gray-500">
+          Module {activeTab} volgt later
+        </div>
+      }
 
-          <ul>
-            {parameterValues.map((parameterValue) => (
-              <li key={parameterValue.id.value}>
-                {parameterValue.value}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
     </main>
   );
 }
