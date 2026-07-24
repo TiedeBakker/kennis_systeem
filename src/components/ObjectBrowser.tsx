@@ -1,94 +1,80 @@
+//src/components/ObjectBrowser.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+
+import type { Object } from "@/core";
+
 import ObjectEditor from "./ObjectEditor";
 
+export default function ObjectBrowser() {
 
-type ObjectItem = {
-  id:string;
-  label:string;
-  validFrom:string|null;
-  validTo:string|null;
-};
+    const [items, setItems] = useState<Object[]>([]);
 
+    const [selected, setSelected] = useState<Object | null>(null);
 
-export default function ObjectBrowser(){
+    async function load() {
 
-  const [items,setItems] =
-    useState<ObjectItem[]>([]);
+        const response = await fetch("/api/objects");
 
-  const [selected,setSelected] =
-    useState<ObjectItem|null>(null);
+        const data: Object[] = await response.json();
 
+        setItems(data);
 
-  async function load(){
+    }
 
-    const r =
-      await fetch("/api/objects");
+    useEffect(() => {
+        load();
+    }, []);
 
-    setItems(await r.json());
+    return (
 
-  }
+        <div className="grid grid-cols-2 gap-6">
 
+            <section>
 
-  useEffect(()=>{
-    load();
-  },[]);
+                <h2 className="font-bold mb-2">
+                    Objecten
+                </h2>
 
+                <button
+                    className="border px-3 py-1 mb-3"
+                    onClick={() => setSelected(null)}
+                >
+                    Nieuw object
+                </button>
 
+                <ul className="border">
 
-  return (
+                    {items.map((object) => (
 
-    <div className="grid grid-cols-2 gap-6">
+                        <li
+                            key={object.id}
+                            className="p-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => setSelected(object)}
+                        >
+                            {object.label}
+                        </li>
 
+                    ))}
 
-      <section>
+                </ul>
 
-        <h2 className="font-bold mb-2">
-          Objecten
-        </h2>
+            </section>
 
+            <ObjectEditor
+                object={selected}
+                onSaved={async (savedObject: Object | null) => {
 
-        <button
-          onClick={() =>
-             setSelected(null)
-          }
-          className="border px-3 py-1 mb-3"
-        >
-          Nieuw object
-        </button>
+                    await load();
 
+                    setSelected(savedObject);
 
-        <ul className="border">
+                }}
+            />
 
-        {items.map(o =>
+        </div>
 
-          <li
-            key={o.id}
-            onClick={() =>
-              setSelected(o)
-            }
-            className="p-2 hover:bg-gray-100 cursor-pointer"
-          >
-            {o.label}
-          </li>
-
-        )}
-
-        </ul>
-
-      </section>
-
-
-
-      <ObjectEditor
-        object={selected}
-        onSaved={load}
-      />
-
-
-    </div>
-
-  );
+    );
 
 }

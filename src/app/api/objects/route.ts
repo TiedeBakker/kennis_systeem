@@ -1,58 +1,74 @@
-import { db } from "@/db";
-import { objects } from "@/db/schema/schema";
-import { desc, eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
-import { randomUUID } from "crypto";
+import { NextRequest, NextResponse } from "next/server";
 
+import { objectService } from "@/services/objectService";
+
+
+// ----------------------------------------------------------------------
+// GET
+// ----------------------------------------------------------------------
 
 export async function GET() {
 
-  const result = await db
-    .select()
-    .from(objects)
-    .orderBy(desc(objects.label));
+    const objects = await objectService.getObjects();
 
-  return NextResponse.json(result);
+    return NextResponse.json(objects);
+
 }
 
 
+// ----------------------------------------------------------------------
+// POST
+// ----------------------------------------------------------------------
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
 
-  const body = await req.json();
+    const body = await request.json();
 
-  const object = {
-    id: randomUUID(),
-    label: body.label,
-    validFrom: body.validFrom ?? null,
-    validTo: body.validTo ?? null,
-  };
+    const object = await objectService.createObject(
+        body.label
+    );
 
+    return NextResponse.json(object);
 
-  await db
-    .insert(objects)
-    .values(object);
-
-
-  return NextResponse.json(object);
 }
 
 
+// ----------------------------------------------------------------------
+// PUT
+// ----------------------------------------------------------------------
 
-export async function PUT(req: Request) {
+export async function PUT(request: NextRequest) {
 
-  const body = await req.json();
+    const object = await request.json();
 
+    const updated = await objectService.updateObject(object);
 
-  await db
-    .update(objects)
-    .set({
-      label: body.label,
-      validFrom: body.validFrom ?? null,
-      validTo: body.validTo ?? null,
-    })
-    .where(eq(objects.id, body.id));
+    return NextResponse.json(updated);
+
+}
 
 
-  return NextResponse.json(body);
+// ----------------------------------------------------------------------
+// DELETE
+// ----------------------------------------------------------------------
+
+export async function DELETE(request: NextRequest) {
+
+    const id = request.nextUrl.searchParams.get("id");
+
+    if (!id) {
+
+        return NextResponse.json(
+            { error: "Missing id" },
+            { status: 400 }
+        );
+
+    }
+
+    await objectService.deleteObject(id);
+
+    return NextResponse.json({
+        success: true,
+    });
+
 }

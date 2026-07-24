@@ -1,57 +1,85 @@
+//src/app/page.tsx
 "use client";
 
 import { useState } from "react";
-import ObjectBrowser from "@/components/ObjectBrowser";
 
-const tabs = [
-  "Objecten",
-  "Relaties",
-  "Parameters",
-  "Waarden",
-  "Import/export",
-];
+import { modules } from "@/modules/modules";
+
+import ObjectBrowser from "@/components/ObjectBrowser";
+import RelationBrowser from "@/components/RelationBrowser";
 
 export default function Home() {
 
-  const [activeTab, setActiveTab] = useState("Objecten");
+    const [activeModule, setActiveModule] =
+        useState("objects");
 
-  return (
-    <main className="p-6">
+    return (
 
-      <h1 className="text-2xl font-bold mb-4">
-        Kennisomgeving
-      </h1>
+        <main className="p-6">
 
-      <div className="flex gap-2 border-b mb-6">
+            <h1 className="text-2xl font-bold mb-4">
 
-        {tabs.map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={
-              activeTab === tab
-              ? "px-4 py-2 border-b-2 font-bold"
-              : "px-4 py-2"
+                Kennisomgeving
+
+            </h1>
+
+
+            <div className="flex gap-2 border-b mb-6">
+
+                {modules.map(module => (
+
+                    <button
+
+                        key={module.id}
+
+                        onClick={() =>
+                            setActiveModule(module.id)
+                        }
+
+                        className={
+                            activeModule === module.id
+                                ? "px-4 py-2 border-b-2 font-bold"
+                                : "px-4 py-2"
+                        }
+
+                    >
+
+                        {module.title}
+
+                    </button>
+
+                ))}
+
+            </div>
+
+
+            {activeModule === "objects" &&
+
+                <ObjectBrowser />
+
             }
-          >
-            {tab}
-          </button>
-        ))}
-
-      </div>
 
 
-      {activeTab === "Objecten" &&
-        <ObjectBrowser />
-      }
+            {activeModule === "relations" &&
+
+                <RelationBrowser />
+
+            }
 
 
-      {activeTab !== "Objecten" &&
-        <div className="text-gray-500">
-          Module {activeTab} volgt later
-        </div>
-      }
+            {activeModule !== "objects" &&
+             activeModule !== "relations" &&
 
-    </main>
-  );
+                <div className="text-gray-500">
+
+                    Module nog niet geïmplementeerd.
+
+                </div>
+
+            }
+
+        </main>
+
+    );
+
 }
